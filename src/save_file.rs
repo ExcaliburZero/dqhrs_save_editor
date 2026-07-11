@@ -1,4 +1,6 @@
-use binrw::{BinRead, BinWrite};
+use std::io::Cursor;
+
+use binrw::{BinRead, BinResult, BinWrite};
 
 #[derive(BinRead, BinWrite, Debug, PartialEq)]
 #[brw(little)]
@@ -49,6 +51,40 @@ pub struct SaveFile {
     pub playtime_in_frames: u32,
     unknown_d: [u8; 2],
     pub name: [u8; 8],
+    unknown_e: [u8; 11],
+    pub checksum: u16,
+}
+
+impl SaveFile {
+    pub fn update_checksum(&mut self) -> BinResult<()> {
+        let mut bytes: Vec<u8> = Vec::new();
+        let mut writer = Cursor::new(&mut bytes);
+        self.write(&mut writer)?;
+
+        self.checksum = get_crc16(0x11, &bytes[0..0x352]);
+
+        Ok(())
+    }
+}
+
+/// Reimplementation of the Nintendo DS BIOS SWI 0x0E (GetCRC16).
+///
+/// https://www.problemkaputt.de/gbatek-bios-misc-functions.htm
+fn get_crc16(initial_crc: u16, data: &[u8]) -> u16 {
+    let mut crc = initial_crc;
+
+    for &byte in data {
+        crc ^= byte as u16;
+        for _ in 0..8 {
+            if crc & 1 != 0 {
+                crc = (crc >> 1) ^ 0xA001;
+            } else {
+                crc >>= 1;
+            }
+        }
+    }
+
+    crc
 }
 
 #[cfg(test)]

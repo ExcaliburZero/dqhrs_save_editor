@@ -15,9 +15,11 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let save_file = read_save_file(&args.input_save_file).expect("Failed to read save file");
+    let mut save_file = read_save_file(&args.input_save_file).expect("Failed to read save file");
 
-    println!("gold: {}", save_file.gold);
+    println!("checksum:         {}", save_file.checksum);
+    save_file.update_checksum().unwrap();
+    println!("updated checksum: {}", save_file.checksum);
 }
 
 fn read_save_file(filepath: &String) -> BinResult<SaveFile> {
