@@ -19,6 +19,7 @@ char magic[10] @ 0x00;
 ItemEntry items[60] @ 0x8A;
 MonsterEntry monsters[20] @ 0x17A;
 
+u16 tank_health @ 0x305;
 u8 ammo[30] @ 0x30E;
 
 u32 gold @ 0x335;

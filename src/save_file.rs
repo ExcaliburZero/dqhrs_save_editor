@@ -5,9 +5,9 @@ use binrw::{BinRead, BinResult, BinWrite};
 #[derive(BinRead, BinWrite, Debug, PartialEq)]
 #[brw(little)]
 pub struct ItemEntry {
-    unknown: u16,
     obtained: u8,
     count: u8,
+    unknown: u16,
 }
 
 impl ItemEntry {
@@ -23,9 +23,9 @@ impl ItemEntry {
 #[derive(BinRead, BinWrite, Debug, PartialEq)]
 #[brw(little)]
 pub struct MonsterEntry {
-    unknown: u16,
     obtained: u8,
     count: u8,
+    unknown: u16,
 }
 
 impl MonsterEntry {
@@ -41,10 +41,12 @@ impl MonsterEntry {
 #[derive(BinRead, BinWrite, Debug, PartialEq)]
 #[brw(magic = b"hiyama_v1", little)]
 pub struct SaveFile {
-    unknown_a: [u8; 0x7F],
+    unknown_a: [u8; 0x81],
     pub items: [ItemEntry; 60],
     pub monsters: [MonsterEntry; 20],
-    unknown_b: [u8; 326],
+    unknown_ba: [u8; 315],
+    pub tank_health: u16,
+    unknown_bb: [u8; 7],
     pub ammo: [u8; 30],
     unknown_c: [u8; 9],
     pub gold: u32,
@@ -120,6 +122,9 @@ mod tests {
             std::array::from_fn(|_| MonsterEntry::new(0, 0, 0));
 
         assert_eq!(expected_monsters, actual.monsters);
+
+        let expected_tank_health = 100;
+        assert_eq!(expected_tank_health, actual.tank_health);
 
         let expected_ammo = [
             101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13,
