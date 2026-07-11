@@ -3,4 +3,9 @@ name = "dqhrs_save_editor"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "dqhrs_save_editor"
+
 [dependencies]
+binrw = "0.15.1"
+clap = { version = "4.6.1", features = ["derive"] }
