@@ -72,9 +72,9 @@ mod tests {
         });
         assert_eq!(expected_items, actual.items);
 
-        let expected_monsters: [MonsterEntry; 20] = std::array::from_fn(|i| match i {
-            _ => MonsterEntry::new(0, 0, 0),
-        });
+        let expected_monsters: [MonsterEntry; 20] =
+            std::array::from_fn(|_| MonsterEntry::new(0, 0, 0));
+
         assert_eq!(expected_monsters, actual.monsters);
 
         let expected_gold = 76;
