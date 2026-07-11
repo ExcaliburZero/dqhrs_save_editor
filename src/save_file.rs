@@ -53,6 +53,7 @@ pub struct SaveFile {
     pub name: [u8; 8],
     unknown_e: [u8; 11],
     pub checksum: u16,
+    pub unknown_f: [u8; 0x1CAC],
 }
 
 impl SaveFile {
