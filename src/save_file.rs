@@ -39,12 +39,21 @@ impl MonsterEntry {
 }
 
 #[derive(BinRead, BinWrite, Debug, PartialEq)]
+#[brw(repr(u8))]
+pub enum TankUpgrade {
+    Locked = 0,
+    Unlocked = 1,
+    Purchased = 3,
+}
+
+#[derive(BinRead, BinWrite, Debug, PartialEq)]
 #[brw(magic = b"hiyama_v1", little)]
 pub struct SaveFile {
     unknown_a: [u8; 0x81],
     pub items: [ItemEntry; 60],
     pub monsters: [MonsterEntry; 20],
-    unknown_ba: [u8; 315],
+    unknown_ba: [u8; 295],
+    pub tank_upgrades: [TankUpgrade; 20],
     pub tank_health: u16,
     unknown_bb: [u8; 7],
     pub ammo: [u8; 30],
@@ -122,6 +131,10 @@ mod tests {
             std::array::from_fn(|_| MonsterEntry::new(0, 0, 0));
 
         assert_eq!(expected_monsters, actual.monsters);
+
+        let expected_tank_upgrades: [TankUpgrade; 20] =
+            std::array::from_fn(|_| TankUpgrade::Locked);
+        assert_eq!(expected_tank_upgrades, actual.tank_upgrades);
 
         let expected_tank_health = 100;
         assert_eq!(expected_tank_health, actual.tank_health);
