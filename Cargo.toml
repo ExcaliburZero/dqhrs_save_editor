@@ -9,3 +9,4 @@ name = "dqhrs_save_editor"
 [dependencies]
 binrw = "0.15.1"
 clap = { version = "4.6.1", features = ["derive"] }
+rstest = "0.26.1"

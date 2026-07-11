@@ -56,12 +56,16 @@ pub struct SaveFile {
 }
 
 impl SaveFile {
-    pub fn update_checksum(&mut self) -> BinResult<()> {
+    pub fn calculate_checksum(&self) -> BinResult<u16> {
         let mut bytes: Vec<u8> = Vec::new();
         let mut writer = Cursor::new(&mut bytes);
         self.write(&mut writer)?;
 
-        self.checksum = get_crc16(0x11, &bytes[0..0x352]);
+        Ok(get_crc16(0x11, &bytes[0..0x352]))
+    }
+
+    pub fn update_checksum(&mut self) -> BinResult<()> {
+        self.checksum = self.calculate_checksum()?;
 
         Ok(())
     }
@@ -92,6 +96,7 @@ mod tests {
     use std::fs::File;
 
     use binrw::BinRead;
+    use rstest::rstest;
 
     use super::*;
 
@@ -129,5 +134,16 @@ mod tests {
 
         let expected_name = [28, 51, 39, 47, 41, 56, 0, 0]; // Rocket
         assert_eq!(expected_name, actual.name);
+    }
+
+    #[rstest]
+    #[case("test/data/01 - First save opportunity.sav")]
+    fn test_calculate_checksum(#[case] filepath: &str) {
+        let save_file = read_save_from_file(filepath);
+
+        let expected = save_file.checksum;
+        let actual = save_file.calculate_checksum().unwrap();
+
+        assert_eq!(expected, actual);
     }
 }
