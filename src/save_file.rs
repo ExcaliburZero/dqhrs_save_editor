@@ -55,7 +55,9 @@ pub struct SaveFile {
     unknown_ba: [u8; 295],
     pub tank_upgrades: [TankUpgrade; 20],
     pub tank_health: u16,
-    unknown_bb: [u8; 7],
+    unknown_bba: [u8; 1],
+    pub crew: [u8; 3],
+    unknown_bbb: [u8; 3],
     pub ammo: [u8; 30],
     unknown_c: [u8; 9],
     pub gold: u32,
@@ -138,6 +140,9 @@ mod tests {
 
         let expected_tank_health = 100;
         assert_eq!(expected_tank_health, actual.tank_health);
+
+        let expected_crew = [255, 255, 255];
+        assert_eq!(expected_crew, actual.crew);
 
         let expected_ammo = [
             101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13,
