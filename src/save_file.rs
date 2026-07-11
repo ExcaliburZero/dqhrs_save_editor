@@ -42,10 +42,12 @@ pub struct SaveFile {
     unknown_a: [u8; 0x7F],
     pub items: [ItemEntry; 60],
     pub monsters: [MonsterEntry; 20],
-    unknown_b: [u8; 365],
+    unknown_b: [u8; 326],
+    pub ammo: [u8; 30],
+    unknown_c: [u8; 9],
     pub gold: u32,
     pub playtime_in_frames: u32,
-    unknown_c: [u8; 2],
+    unknown_d: [u8; 2],
     pub name: [u8; 8],
 }
 
@@ -76,6 +78,12 @@ mod tests {
             std::array::from_fn(|_| MonsterEntry::new(0, 0, 0));
 
         assert_eq!(expected_monsters, actual.monsters);
+
+        let expected_ammo = [
+            101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13,
+            101, 101, 13, 101, 101, 13, 101, 101, 13, 101, 101, 13,
+        ];
+        assert_eq!(expected_ammo, actual.ammo);
 
         let expected_gold = 76;
         assert_eq!(expected_gold, actual.gold);

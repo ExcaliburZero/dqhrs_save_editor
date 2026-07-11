@@ -19,6 +19,8 @@ char magic[9] @ 0x00;
 ItemEntry items[60] @ 0x88;
 MonsterEntry monsters[20] @ 0x178;
 
+u8 ammo[30] @ 0x30E;
+
 u32 gold @ 0x335;
 u32 playtime_in_frames @ 0x339;
 
