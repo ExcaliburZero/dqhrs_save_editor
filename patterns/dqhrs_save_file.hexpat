@@ -27,6 +27,7 @@ MonsterEntry monsters[20] @ 0x17A;
 
 TankUpgrade tank_upgrades[20] @ 0x2F1;
 u16 tank_health @ 0x305;
+u8 tank @ 0x307;
 u8 crew[0x03] @ 0x308; // 0xFF = empty
 u8 crew_tactics[3] @ 0x30B;
 u8 ammo[30] @ 0x30E;
